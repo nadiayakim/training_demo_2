@@ -1,0 +1,445 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/qgis2web.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <link rel="stylesheet" href="css/filter.css">
+<link rel="stylesheet" href="css/nouislider.min.css">
+        <link rel="stylesheet" href="css/leaflet-control-geocoder.Geocoder.css">
+        <link rel="stylesheet" href="css/leaflet-measure.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        <script src="js/qgis2web_expressions.js"></script>
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-control-geocoder.Geocoder.js"></script>
+        <script src="js/leaflet-measure.js"></script>
+        <script src="js/tailDT.js"></script>
+<script src="js/nouislider.min.js"></script>
+<script src="js/wNumb.js"></script>
+        <script src="data/Health_Facilities_1.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        })
+        var hash = new L.Hash(map);
+        map.attributionControl.setPrefix('<a href="https://github.com/tomchadwin/qgis2web" target="_blank">qgis2web</a> &middot; <a href="https://leafletjs.com" title="A JS library for interactive maps">Leaflet</a> &middot; <a href="https://qgis.org">QGIS</a>');
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var measureControl = new L.Control.Measure({
+            position: 'topleft',
+            primaryLengthUnit: 'meters',
+            secondaryLengthUnit: 'kilometers',
+            primaryAreaUnit: 'sqmeters',
+            secondaryAreaUnit: 'hectares'
+        });
+        measureControl.addTo(map);
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .innerHTML = '';
+        document.getElementsByClassName('leaflet-control-measure-toggle')[0]
+        .className += ' fas fa-ruler';
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            if (bounds_group.getLayers().length) {
+                map.fitBounds(bounds_group.getBounds());
+            }
+        }
+        map.createPane('pane_ESRIGraydark_0');
+        map.getPane('pane_ESRIGraydark_0').style.zIndex = 400;
+        var layer_ESRIGraydark_0 = L.tileLayer('https://services.arcgisonline.com/ArcGIS/rest/services/Canvas/World_Dark_Gray_Base/MapServer/tile/{z}/{y}/{x}', {
+            pane: 'pane_ESRIGraydark_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_ESRIGraydark_0;
+        map.addLayer(layer_ESRIGraydark_0);
+        function pop_Health_Facilities_1(feature, layer) {
+            var popupContent = '<table>\
+                    <tr>\
+                        <th scope="row">Raion</th>\
+                        <td>' + (feature.properties['Raion'] !== null ? autolinker.link(feature.properties['Raion'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">Hromada</th>\
+                        <td>' + (feature.properties['Hromada'] !== null ? autolinker.link(feature.properties['Hromada'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">ASR</th>\
+                        <td>' + (feature.properties['ASR'] !== null ? autolinker.link(feature.properties['ASR'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">CMN</th>\
+                        <td>' + (feature.properties['CMN'] !== null ? autolinker.link(feature.properties['CMN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">CMN_unit</th>\
+                        <td>' + (feature.properties['CMN_unit'] !== null ? autolinker.link(feature.properties['CMN_unit'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">CMSN</th>\
+                        <td>' + (feature.properties['CMSN'] !== null ? autolinker.link(feature.properties['CMSN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">CMSN_unit</th>\
+                        <td>' + (feature.properties['CMSN_unit'] !== null ? autolinker.link(feature.properties['CMSN_unit'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">SMEN</th>\
+                        <td>' + (feature.properties['SMEN'] !== null ? autolinker.link(feature.properties['SMEN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">SMEN_unit</th>\
+                        <td>' + (feature.properties['SMEN_unit'] !== null ? autolinker.link(feature.properties['SMEN_unit'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">HVMEN</th>\
+                        <td>' + (feature.properties['HVMEN'] !== null ? autolinker.link(feature.properties['HVMEN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">HVMEN_unit</th>\
+                        <td>' + (feature.properties['HVMEN_unit'] !== null ? autolinker.link(feature.properties['HVMEN_unit'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">SDoEA</th>\
+                        <td>' + (feature.properties['SDoEA'] !== null ? autolinker.link(feature.properties['SDoEA'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PC</th>\
+                        <td>' + (feature.properties['PC'] !== null ? autolinker.link(feature.properties['PC'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">PMS</th>\
+                        <td>' + (feature.properties['PMS'] !== null ? autolinker.link(feature.properties['PMS'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">APS</th>\
+                        <td>' + (feature.properties['APS'] !== null ? autolinker.link(feature.properties['APS'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">AN</th>\
+                        <td>' + (feature.properties['AN'] !== null ? autolinker.link(feature.properties['AN'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">RS</th>\
+                        <td>' + (feature.properties['RS'] !== null ? autolinker.link(feature.properties['RS'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">AtF</th>\
+                        <td>' + (feature.properties['AtF'] !== null ? autolinker.link(feature.properties['AtF'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                    <tr>\
+                        <th scope="row">ARR</th>\
+                        <td>' + (feature.properties['ARR'] !== null ? autolinker.link(feature.properties['ARR'].toLocaleString()) : '') + '</td>\
+                    </tr>\
+                </table>';
+            layer.bindPopup(popupContent, {maxHeight: 400});
+        }
+
+        function style_Health_Facilities_1_0() {
+            return {
+                pane: 'pane_Health_Facilities_1',
+                opacity: 1,
+                color: 'rgba(4,48,160,1.0)',
+                dashArray: '',
+                lineCap: 'butt',
+                lineJoin: 'miter',
+                weight: 4.0, 
+                fill: true,
+                fillOpacity: 1,
+                fillColor: 'rgba(82,131,228,0.5254901960784314)',
+                interactive: true,
+            }
+        }
+        map.createPane('pane_Health_Facilities_1');
+        map.getPane('pane_Health_Facilities_1').style.zIndex = 401;
+        map.getPane('pane_Health_Facilities_1').style['mix-blend-mode'] = 'normal';
+        var layer_Health_Facilities_1 = new L.geoJson(json_Health_Facilities_1, {
+            attribution: '',
+            interactive: true,
+            dataVar: 'json_Health_Facilities_1',
+            layerName: 'layer_Health_Facilities_1',
+            pane: 'pane_Health_Facilities_1',
+            onEachFeature: pop_Health_Facilities_1,
+            style: style_Health_Facilities_1_0,
+        });
+        bounds_group.addLayer(layer_Health_Facilities_1);
+        map.addLayer(layer_Health_Facilities_1);
+        map.createPane('pane_ESRIBoundariesPlaces_2');
+        map.getPane('pane_ESRIBoundariesPlaces_2').style.zIndex = 402;
+        var layer_ESRIBoundariesPlaces_2 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/Reference/World_Boundaries_and_Places/MapServer/tile/{z}/{y}/{x}', {
+            pane: 'pane_ESRIBoundariesPlaces_2',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 20
+        });
+        layer_ESRIBoundariesPlaces_2;
+        map.addLayer(layer_ESRIBoundariesPlaces_2);
+            var abstract = new L.Control({'position':'bottomright'});
+            abstract.onAdd = function (map) {
+                this._div = L.DomUtil.create('div',
+                'leaflet-control abstract');
+                this._div.id = 'abstract'
+
+                    abstract.show();
+                    return this._div;
+                };
+                abstract.show = function () {
+                    this._div.classList.remove("abstract");
+                    this._div.classList.add("abstractUncollapsed");
+                    this._div.innerHTML = 'To select a specific area, use the filters on the right. Use the mouse wheel to zoom in on the object. Click on an object to view detailed information about it';
+            };
+            abstract.addTo(map);
+        var osmGeocoder = new L.Control.Geocoder({
+            collapsed: true,
+            position: 'topleft',
+            text: 'Search',
+            title: 'Testing'
+        }).addTo(map);
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .className += ' fa fa-search';
+        document.getElementsByClassName('leaflet-control-geocoder-icon')[0]
+        .title += 'Search for a place';
+        var baseMaps = {};
+        L.control.layers(baseMaps,{"ESRI Boundaries&Places": layer_ESRIBoundariesPlaces_2,'<img src="legend/Health_Facilities_1.png" /> Health_Facilities': layer_Health_Facilities_1,"ESRI Gray (dark)": layer_ESRIGraydark_0,}).addTo(map);
+        setBounds();
+        var mapDiv = document.getElementById('map');
+        var row = document.createElement('div');
+        row.className="row";
+        row.id="all";
+        row.style.height = "100%";
+        var col1 = document.createElement('div');
+        col1.className="col9";
+        col1.id = "mapWindow";
+        col1.style.height = "99%";
+        col1.style.width = "80%";
+        col1.style.display = "inline-block";
+        var col2 = document.createElement('div');
+        col2.className="col3";
+        col2.id = "menu";
+        col2.style.display = "inline-block";
+        mapDiv.parentNode.insertBefore(row, mapDiv);
+        document.getElementById("all").appendChild(col1);
+        document.getElementById("all").appendChild(col2);
+        col1.appendChild(mapDiv)
+        var Filters = {"Raion": "str","Hromada": "str","ASR": "str"};
+        function filterFunc() {
+          map.eachLayer(function(lyr){
+          if ("options" in lyr && "dataVar" in lyr["options"]){
+            features = this[lyr["options"]["dataVar"]].features.slice(0);
+            try{
+              for (key in Filters){
+                keyS = key.replace(/[^a-zA-Z0-9_]/g, "")
+                if (Filters[key] == "str" || Filters[key] == "bool"){
+                  var selection = [];
+                  var options = document.getElementById("sel_" + keyS).options
+                  for (var i=0; i < options.length; i++) {
+                    if (options[i].selected) selection.push(options[i].value);
+                  }
+                    try{
+                      if (key in features[0].properties){
+                        for (i = features.length - 1;
+                          i >= 0; --i){
+                          if (selection.indexOf(
+                          features[i].properties[key])<0
+                          && selection.length>0) {
+                          features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                  }
+                }
+                if (Filters[key] == "int"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (parseInt(features[i].properties[key])
+                          < sliderVals[0]
+                          || parseInt(features[i].properties[key])
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "real"){
+                  sliderVals =  document.getElementById(
+                    "div_" + keyS).noUiSlider.get();
+                  try{
+                    if (key in features[0].properties){
+                    for (i = features.length - 1; i >= 0; --i){
+                      if (features[i].properties[key]
+                          < sliderVals[0]
+                          || features[i].properties[key]
+                          > sliderVals[1]){
+                            features.splice(i,1);
+                          }
+                        }
+                      }
+                    } catch(err){
+                    }
+                  }
+                if (Filters[key] == "date"
+                  || Filters[key] == "datetime"
+                  || Filters[key] == "time"){
+                  try{
+                    if (key in features[0].properties){
+                      HTMLkey = key.replace(/[&\/\\#,+()$~%.'":*?<>{} ]/g, '');
+                      startdate = document.getElementById("dat_" +
+                        HTMLkey + "_date1").value.replace(" ", "T");
+                      enddate = document.getElementById("dat_" +
+                        HTMLkey + "_date2").value.replace(" ", "T");
+                      for (i = features.length - 1; i >= 0; --i){
+                        if (features[i].properties[key] < startdate
+                          || features[i].properties[key] > enddate){
+                          features.splice(i,1);
+                        }
+                      }
+                    }
+                  } catch(err){
+                  }
+                }
+              }
+            } catch(err){
+            }
+          this[lyr["options"]["layerName"]].clearLayers();
+          this[lyr["options"]["layerName"]].addData(features);
+          }
+          })
+        }
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Raion = document.createElement('div');
+            div_Raion.id = "div_Raion";
+            div_Raion.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Raion);
+            sel_Raion = document.createElement('select');
+            sel_Raion.multiple = true;
+            sel_Raion.size = 3;
+            sel_Raion.id = "sel_Raion";
+            var Raion_options_str = "<option value='' unselected></option>";
+            sel_Raion.onchange = function(){filterFunc()};
+            Raion_options_str  += '<option value="Kramatorskyi">Kramatorskyi</option>';
+            Raion_options_str  += '<option value="Kupianskyi">Kupianskyi</option>';
+            Raion_options_str  += '<option value="Kyivskyi">Kyivskyi</option>';
+            sel_Raion.innerHTML = Raion_options_str;
+            div_Raion.appendChild(sel_Raion);
+            var lab_Raion = document.createElement('div');
+            lab_Raion.innerHTML = 'Raion';
+            lab_Raion.className = 'filterlabel';
+            div_Raion.appendChild(lab_Raion);
+            var reset_Raion = document.createElement('div');
+            reset_Raion.innerHTML = 'clear filter';
+            reset_Raion.className = 'filterlabel';
+            reset_Raion.onclick = function() {
+                var options = document.getElementById("sel_Raion").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Raion.appendChild(reset_Raion);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_Hromada = document.createElement('div');
+            div_Hromada.id = "div_Hromada";
+            div_Hromada.className= "filterselect";
+            document.getElementById("menu").appendChild(div_Hromada);
+            sel_Hromada = document.createElement('select');
+            sel_Hromada.multiple = true;
+            sel_Hromada.size = 7;
+            sel_Hromada.id = "sel_Hromada";
+            var Hromada_options_str = "<option value='' unselected></option>";
+            sel_Hromada.onchange = function(){filterFunc()};
+            Hromada_options_str  += '<option value="NULL">NULL</option>';
+            Hromada_options_str  += '<option value="Druzhkivska">Druzhkivska</option>';
+            Hromada_options_str  += '<option value="Kostiantynivska">Kostiantynivska</option>';
+            Hromada_options_str  += '<option value="Kramatorska">Kramatorska</option>';
+            Hromada_options_str  += '<option value="Kupianska">Kupianska</option>';
+            Hromada_options_str  += '<option value="Lymanska">Lymanska</option>';
+            Hromada_options_str  += '<option value="Slovianska">Slovianska</option>';
+            sel_Hromada.innerHTML = Hromada_options_str;
+            div_Hromada.appendChild(sel_Hromada);
+            var lab_Hromada = document.createElement('div');
+            lab_Hromada.innerHTML = 'Hromada';
+            lab_Hromada.className = 'filterlabel';
+            div_Hromada.appendChild(lab_Hromada);
+            var reset_Hromada = document.createElement('div');
+            reset_Hromada.innerHTML = 'clear filter';
+            reset_Hromada.className = 'filterlabel';
+            reset_Hromada.onclick = function() {
+                var options = document.getElementById("sel_Hromada").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_Hromada.appendChild(reset_Hromada);
+            document.getElementById("menu").appendChild(
+                document.createElement("div"));
+            var div_ASR = document.createElement('div');
+            div_ASR.id = "div_ASR";
+            div_ASR.className= "filterselect";
+            document.getElementById("menu").appendChild(div_ASR);
+            sel_ASR = document.createElement('select');
+            sel_ASR.multiple = true;
+            sel_ASR.size = 4;
+            sel_ASR.id = "sel_ASR";
+            var ASR_options_str = "<option value='' unselected></option>";
+            sel_ASR.onchange = function(){filterFunc()};
+            ASR_options_str  += '<option value="NULL">NULL</option>';
+            ASR_options_str  += '<option value="L3A">L3A</option>';
+            ASR_options_str  += '<option value="L3B">L3B</option>';
+            ASR_options_str  += '<option value="L3C">L3C</option>';
+            sel_ASR.innerHTML = ASR_options_str;
+            div_ASR.appendChild(sel_ASR);
+            var lab_ASR = document.createElement('div');
+            lab_ASR.innerHTML = 'ASR';
+            lab_ASR.className = 'filterlabel';
+            div_ASR.appendChild(lab_ASR);
+            var reset_ASR = document.createElement('div');
+            reset_ASR.innerHTML = 'clear filter';
+            reset_ASR.className = 'filterlabel';
+            reset_ASR.onclick = function() {
+                var options = document.getElementById("sel_ASR").options;
+                for (var i=0; i < options.length; i++) {
+                    options[i].selected = false;
+                }
+                filterFunc();
+            };
+            div_ASR.appendChild(reset_ASR);
+        </script>
+    </body>
+</html>
